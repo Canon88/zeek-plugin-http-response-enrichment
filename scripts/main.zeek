@@ -1,13 +1,10 @@
 module ResponseBody;
 
 export {
-    ## The length of POST bodies to extract.
-    # const length: count = "" &redef;
-
-    ## Hook to include http response body from audit
+    ## Hook to include http response body
     global include: hook(hostname: string, url: string);
     
-    ## Hook to exclude http response body from audit
+    ## Hook to exclude http response body
     global exclude: hook(hostname: string, url: string);
 }
 
@@ -59,7 +56,8 @@ event http_entity_data(c: connection, is_orig: bool, length: count, data: string
         }
     }
 
-## Add http response time
+## Add HTTP response time
+
 event http_message_done(c: connection, is_orig: bool, stat:  http_message_stat) &priority=20
     {
     if ( is_orig )
