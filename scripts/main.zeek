@@ -32,6 +32,10 @@ export {
 
 event http_begin_entity(c: connection, is_orig: bool)
     {
+
+    if ( ! c$http?$host )
+        return;  
+
     if ( ! hook ResponseBody::exclude(c$http$host, c$http$uri) )
         return;
 
@@ -62,7 +66,7 @@ event http_message_done(c: connection, is_orig: bool, stat:  http_message_stat) 
     {
     if ( is_orig )
         c$http$start_time = stat$start;
-    else
+    if ( (! is_orig) && (c$http?$start_time) )
         {
         c$http$end_time = network_time();
         c$http$response_time = time_to_double(c$http$end_time) - time_to_double(c$http$start_time);
