@@ -59,16 +59,3 @@ event http_entity_data(c: connection, is_orig: bool, length: count, data: string
         c$http$response_body = c$http$response_body[0:max_body_size] + "...";
         }
     }
-
-## Add HTTP response time
-
-event http_message_done(c: connection, is_orig: bool, stat:  http_message_stat) &priority=20
-    {
-    if ( is_orig )
-        c$http$start_time = stat$start;
-    if ( (! is_orig) && (c$http?$start_time) )
-        {
-        c$http$end_time = network_time();
-        c$http$response_time = time_to_double(c$http$end_time) - time_to_double(c$http$start_time);
-        }
-    }
